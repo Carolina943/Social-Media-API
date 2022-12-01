@@ -1,7 +1,27 @@
-const express = require('express')
-const app = express();
-const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
+require('express-async-errors');
 
-app.listen(3000, ()=> {
-    console.log("Server is running");
-})
+//Express
+const express = require('express');
+const app = express();
+
+//database
+const connectDB = require('./db/connect');
+
+
+//PORT
+
+const port = process.env.PORT
+
+
+const start = async() =>{
+  try{
+    await connectDB()
+    app.listen(port, console.log(`Server is listening on port ${port}...`))
+  }catch(error){
+    console.log(error)
+  }
+}
+
+start()
