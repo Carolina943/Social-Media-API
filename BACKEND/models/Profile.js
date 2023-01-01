@@ -7,7 +7,7 @@ const ProfileSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  profilePicture:{
+  profileImage:{
     type: String,
     default: '/uploads/example.jpeg',
   },
@@ -34,7 +34,7 @@ const ProfileSchema = new mongoose.Schema({
   },
   isAdmin:{
     type: Boolean,
-    default: false,
+    default: true,
   },
 },
 
