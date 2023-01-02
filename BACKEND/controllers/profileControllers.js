@@ -1,7 +1,10 @@
 const Profile = require('../models/Profile');
+const User = require('../models/User')
 const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
 const path = require('path');
+const { findById } = require('../models/Profile');
+const { profile } = require('console');
 
  const createProfile = async (req, res) =>{
    req.body.user = req.user.userId;
@@ -57,10 +60,35 @@ const profileImage = async(req,res) =>{
   res.status(StatusCodes.OK).json({ image: `/public/uploads/${profileImage.name}`});
 };
 
+const followUser = async (req, res) =>{
+  if(req.body.userId != req.params.id)
+  {
+     
+    try{
+       const user = await User.findById(req.params.id)
+       const currentUser = await User.findById(req.body.userId)
+
+       if(!user.followers.includes(req.body.userId)){
+         await user.updateOne({ $push: {followers: req.body.userId} })
+         await currentUser.updateOne({$push: {followings: req.params.id} })
+
+         res.status(200).json('User has been followed');
+       } else {
+         res.status(403).json('You already followed this user')
+       }
+     }catch(error){
+        res.status(500).json(error)
+     }
+  }else{
+    res.status(403).json('Action forbidden');
+  }
+}
+
 module.exports = {
   createProfile,
   getAllProfile,
   getSingleProfile,
   updateProfile,
   profileImage,
+  followUser
 };

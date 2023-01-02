@@ -8,7 +8,8 @@ const {
   getAllProfile,
   getSingleProfile,
   updateProfile,
-  profileImage
+  profileImage,
+  followUser
 } = require('../controllers/profileControllers');
 
 
@@ -28,7 +29,7 @@ router
 .get(getSingleProfile)
 .patch([authenticateUser, authorizePermissions('admin')], updateProfile);
 
-
+router.route('/:id').put(followUser);
 
 
 
