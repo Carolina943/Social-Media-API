@@ -1,10 +1,9 @@
 const Profile = require('../models/Profile');
-const User = require('../models/User')
+const User = require('../models/User');
 const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
 const path = require('path');
-const { findById } = require('../models/Profile');
-const { profile } = require('console');
+
 
  const createProfile = async (req, res) =>{
    req.body.user = req.user.userId;
@@ -61,26 +60,22 @@ const profileImage = async(req,res) =>{
 };
 
 const followUser = async (req, res) =>{
-  if(req.body.userId != req.params.id)
-  {
-     
-    try{
-       const user = await User.findById(req.params.id)
-       const currentUser = await User.findById(req.body.userId)
-
-       if(!user.followers.includes(req.body.userId)){
-         await user.updateOne({ $push: {followers: req.body.userId} })
-         await currentUser.updateOne({$push: {followings: req.params.id} })
-
-         res.status(200).json('User has been followed');
-       } else {
-         res.status(403).json('You already followed this user')
-       }
-     }catch(error){
-        res.status(500).json(error)
-     }
-  }else{
-    res.status(403).json('Action forbidden');
+   if (req.body._id !== req.params.id) {
+    try {
+      const user = await Profile.findById(req.params.id);
+      const currentUser = await Profile.findById(req.body);
+      if (!user.followers.includes(req.body._Id)) {
+        await user.updateOne({ $push: { followers: req.body._id } });
+        await currentUser.updateOne({ $push: { followings: req.params._id } });
+        res.status(200).json("profile user has been followed");
+      } else {
+        res.status(403).json("you already follow this profile");
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("you can't follow yourself");
   }
 }
 

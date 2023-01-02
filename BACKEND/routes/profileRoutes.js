@@ -29,7 +29,7 @@ router
 .get(getSingleProfile)
 .patch([authenticateUser, authorizePermissions('admin')], updateProfile);
 
-router.route('/:id').put(followUser);
+router.route('/:id/follow').put(followUser);
 
 
 
