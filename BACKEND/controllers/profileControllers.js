@@ -1,5 +1,4 @@
 const Profile = require('../models/Profile');
-const User = require('../models/User');
 const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
 const path = require('path');
@@ -11,9 +10,14 @@ const path = require('path');
    res.status(StatusCodes.CREATED).json({profile});
  };
 
+
+ const showCurrentProfile = async (req, res) =>{
+    res.status(StatusCodes.OK).json({profile: req.user})
+ }
+
 const getAllProfile = async (req, res) =>{
   const profile = await Profile.find({});
-  res.status(StatusCodes.OK).json({profile, count: profile.length});
+  res.status(StatusCodes.OK).json({profile, count: profile.length}); 
 };
 
 const getSingleProfile = async (req,res) =>{
@@ -59,25 +63,7 @@ const profileImage = async(req,res) =>{
   res.status(StatusCodes.OK).json({ image: `/public/uploads/${profileImage.name}`});
 };
 
-const followUser = async (req, res) =>{
-   if (req.body._id !== req.params.id) {
-    try {
-      const user = await Profile.findById(req.params.id);
-      const currentUser = await Profile.findById(req.body);
-      if (!user.followers.includes(req.body._Id)) {
-        await user.updateOne({ $push: { followers: req.body._id } });
-        await currentUser.updateOne({ $push: { followings: req.params._id } });
-        res.status(200).json("profile user has been followed");
-      } else {
-        res.status(403).json("you already follow this profile");
-      }
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  } else {
-    res.status(403).json("you can't follow yourself");
-  }
-}
+
 
 module.exports = {
   createProfile,
@@ -85,5 +71,5 @@ module.exports = {
   getSingleProfile,
   updateProfile,
   profileImage,
-  followUser
+  showCurrentProfile,
 };

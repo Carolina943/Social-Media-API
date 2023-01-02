@@ -9,7 +9,7 @@ const {
   getSingleProfile,
   updateProfile,
   profileImage,
-  followUser
+  showCurrentProfile
 } = require('../controllers/profileControllers');
 
 
@@ -18,6 +18,10 @@ router
 .route('/')
 .post([authenticateUser, authorizePermissions('admin')], createProfile)
 .get(getAllProfile);
+
+router
+.route('/showMeProfile')
+.get(authenticateUser, showCurrentProfile);
 
 
 router
@@ -29,7 +33,7 @@ router
 .get(getSingleProfile)
 .patch([authenticateUser, authorizePermissions('admin')], updateProfile);
 
-router.route('/:id/follow').put(followUser);
+
 
 
 
