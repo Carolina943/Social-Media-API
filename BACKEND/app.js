@@ -21,6 +21,7 @@ const userRouter = require('./routes/userRoutes');
 const profileRouter = require('./routes/profileRoutes');
 const followRouter = require('./routes/followRoutes');
 const postRouter = require('./routes/postRoutes');
+const replyRouter = require('./routes/replyRoutes');
 
 //middleware
 const notFoundMiddleware = require('./middleware/not-found');
@@ -41,6 +42,7 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/profiles', profileRouter);
 app.use('/api/v1/follow', followRouter);
 app.use('/api/v1/post', postRouter);
+app.use('/api/v1/reply', replyRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

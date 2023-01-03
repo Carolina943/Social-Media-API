@@ -14,6 +14,7 @@ const {
   uploadImage,
 } = require('../controllers/postControllers');
 
+const {getSinglePostReply} = require('../controllers/replyControllers');
 
 router
 .route('/')
@@ -30,5 +31,8 @@ router
 .patch([authenticateUser, authorizePermissions('admin')], updatePost)
 .delete([authenticateUser, authorizePermissions('admin')], deletePost);
 
+
+router
+.route('/:id/post').get(getSinglePostReply);
 
 module.exports = router;

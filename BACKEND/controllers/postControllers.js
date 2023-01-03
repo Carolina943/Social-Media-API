@@ -37,11 +37,37 @@ const updatePost = async (req,res) =>{
 };
 
 const deletePost = async (req, res)=>{
-  res.send('Delete Post');
+  const {id: postId} = req.params;
+  const post = await Post.findOne({_id: postId});
+
+  if(!post){
+    throw new CustomError.NotFoundError(`No post with id: ${postId}`);
+  }
+  await post.remove();
+  res.status(StatusCodes.OK).json({msg: 'Success! Post removed.'})
 };
 
 const uploadImage = async (req, res) =>{
-  res.send('Upload Image');
+  if(!req.files){
+    throw new CustomError.BadRequestError('No File Uploaded');
+  }
+  const postImage = req.files.image;
+  if(!postImage.mimetype.startsWith('image')){
+    throw new CustomError.BadRequestError('Please Upload Image');
+  }
+  const maxSize = 280*150;
+
+  if(postImage.size > maxSize){
+    throw new Custom.BadRequestError(
+      'Please upload image smaller than 1MB'
+    );
+  }
+  const imagePath = path.join(
+    __dirname,
+    '../public/uploads' + `${postImage.name}`
+  );
+  await postImage.mv(imagePath);
+  res.status(StatusCodes.OK).json({ image:`/public/uploads/${postImage.name}` });
 };
 
 module.exports = {
