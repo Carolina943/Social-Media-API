@@ -33,6 +33,6 @@ router
 
 
 router
-.route('/:id/post').get(getSinglePostReply);
+.route('/:id/reply').get(getSinglePostReply);
 
 module.exports = router;

@@ -34,4 +34,15 @@ const PostSchema = new mongoose.Schema({
 
 );
 
+PostSchema.virtual('reply', {
+  ref: 'Reply',
+  localField: '_id',
+  foreignField: 'post',
+  justOne: false,
+});
+
+PostSchema.pre('remove', async function(next){
+   await this.model('Reply').deleteMany({ post: this._id});
+})
+
 module.exports = mongoose.model('Post', PostSchema);
