@@ -12,6 +12,8 @@ const {
   updatePost,
   deletePost,
   uploadImage,
+  likePost,
+  dislikePost,
 } = require('../controllers/postControllers');
 
 const {getSinglePostReply} = require('../controllers/replyControllers');
@@ -31,6 +33,11 @@ router
 .patch([authenticateUser, authorizePermissions('admin')], updatePost)
 .delete([authenticateUser, authorizePermissions('admin')], deletePost);
 
+router
+.route('/:id/like').put(likePost);
+
+router
+.route('/:id/dislike').put(dislikePost);
 
 router
 .route('/:id/reply').get(getSinglePostReply);

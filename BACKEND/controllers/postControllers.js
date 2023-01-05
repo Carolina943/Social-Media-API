@@ -70,6 +70,33 @@ const uploadImage = async (req, res) =>{
   res.status(StatusCodes.OK).json({ image:`/public/uploads/${postImage.name}` });
 };
 
+const likePost = async (req, res)=>{
+   const post = await Post.findById(req.params.id);
+   
+   if(!post){
+    throw new CustomError.NotFoundError(`No post with id: ${postId}`);
+  }
+
+   if(!post.likes.includes(req.body.userId)){
+      await post.updateOne({$push: {likes: req.body.userId}});
+   }
+    res.status(StatusCodes.OK).json('The post has been liked');
+};
+
+ 
+const dislikePost = async (req, res) =>{
+   const post = await Post.findById(req.params.id);
+
+   if(!post){
+     throw new CustomError.NotFoundError(`No post with id: ${post}`);
+   }
+
+   if(post.likes.includes(req.body.userId)){
+     await post.updateOne({$pull: {likes: req.body.userId}});
+   }
+   res.status(StatusCodes.OK).json('The post has been disliked')
+}
+
 module.exports = {
   createPost,
   getAllPost,
@@ -77,4 +104,6 @@ module.exports = {
   updatePost,
   deletePost,
   uploadImage,
+  likePost,
+  dislikePost,
 };
