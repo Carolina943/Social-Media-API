@@ -3,12 +3,10 @@ const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
 const {createTokenUser, attachCookiesToResponse} = require('../utils');
 
-//Show Current User
 const showCurrentUser = async (req, res) =>{
   res.status(StatusCodes.OK).json({user: req.user });
 };
 
-//Update User
 
 const updateUser = async (req, res) =>{
    const {email, name} = req.body;
@@ -26,8 +24,6 @@ const updateUser = async (req, res) =>{
    res.status(StatusCodes.OK).json({user: tokenUser});
 };
 
-
-//Update Password User
 
 const updateUserPassword = async (req, res) => {
   const { oldPassword, newPassword} = req.body;
